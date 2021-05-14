@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar orange lighten-1">
+  <nav class="navbar green lighten-1">
       <div class="nav-wrapper">
         <div class="navbar-left">
           <a href="#" @click.prevent="$emit('burger-click')">
@@ -16,7 +16,7 @@
                 data-target="dropdown"
                 ref="dropdown"
             >
-              USER NAME
+              <strong>{{name}}</strong>
               <i class="material-icons right">arrow_drop_down</i>
             </a>
 
@@ -51,6 +51,11 @@ export default {
     logout() {
       this.$store.dispatch('logout')
       this.$router.push('/login?message=logout')
+    }
+  },
+  computed: {
+    name() {
+      return this.$store.getters.info.name
     }
   },
   mounted() {

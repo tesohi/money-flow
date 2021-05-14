@@ -1,20 +1,24 @@
 <template>
-  <div class="app-main-layout">
-    
-    <Navbar @burger-click="isOpen = !isOpen" />
+  <div>
+    <Loader v-if="loading" />
 
-    <Sidebar v-model="isOpen" />      
+    <div class="app-main-layout" v-else>
+      
+      <Navbar @burger-click="isOpen = !isOpen" />
 
-    <main class="app-content" :class="{full: !isOpen}">
-      <div class="app-page">
-        <router-view/>
+      <Sidebar v-model="isOpen" />      
+
+      <main class="app-content" :class="{full: !isOpen}">
+        <div class="app-page">
+          <router-view/>
+        </div>
+      </main>
+
+      <div class="fixed-action-btn">
+        <router-link to="/record" class="btn-floating btn-large blue darken-1">
+          <i class="large material-icons">add</i>
+        </router-link>
       </div>
-    </main>
-
-    <div class="fixed-action-btn">
-      <router-link to="/record" class="btn-floating btn-large blue">
-        <i class="large material-icons">add</i>
-      </router-link>
     </div>
   </div>
 </template>
@@ -26,8 +30,16 @@ import Sidebar from '@/components/app/Sidebar.vue'
 export default {
   name: 'MainLayout',
   data: () => ({
-    isOpen: true
+    isOpen: true,
+    loading: true
   }),
+  async mounted() {
+    if (!Object.keys(this.$store.getters.info).length) {
+      await this.$store.dispatch('fetchInfo')
+    }
+
+    this.loading = false
+  },
   components: {
     Navbar,
     Sidebar
