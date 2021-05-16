@@ -34,14 +34,14 @@ export default {
     currencies: ['RUB', 'USD', 'EUR']
   }),
   computed: {
-    /* base() {
+    base() {
       return this.$store.getters.info.bill / (this.rates['RUB'] / this.rates['EUR'])
-    } */
+    }
   },
   methods: {
-    /* getCurrency(currency) {
+    getCurrency(currency) {
       return this.base * this.rates[currency]
-    } */
+    }
   }
 }
 </script>

@@ -6,7 +6,7 @@
     <section>
       <div class="row">
         
-        <CategoryEdit />
+        <CategoryCreate />
 
         <CategoryEdit />
 
