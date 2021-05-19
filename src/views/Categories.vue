@@ -6,7 +6,7 @@
     <section>
       <div class="row">
         
-        <CategoryCreate />
+        <CategoryCreate @created="addNewCategory" />
 
         <CategoryEdit />
 
@@ -21,9 +21,18 @@ import CategoryEdit from '@/components/CategoryEdit'
 
 export default {
   name: 'Categories',
+  data: () => ({
+    categories: []
+  }),
   components: {
     CategoryCreate,
     CategoryEdit
   },
+  methods: {
+    addNewCategory(category) {
+      this.categories.unshift(category)
+      console.log(this.categories);
+    }
+  }
 }
 </script>

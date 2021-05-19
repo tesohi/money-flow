@@ -36,13 +36,13 @@ export default {
     currency: null
   }),
   async mounted() {
-    this.currency = await this.$store.dispatch('fetchCurrency')
+    /* this.currency = await this.$store.dispatch('fetchCurrency') */
     this.loading = false
   },
   methods: {
     async refresh() {
       this.loading = true
-      this.currency = await this.$store.dispatch('fetchCurrency')
+      /* this.currency = await this.$store.dispatch('fetchCurrency') */
       this.loading = false
     }
   },
