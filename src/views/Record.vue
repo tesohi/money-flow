@@ -12,17 +12,6 @@
     </p>
 
     <form class="form" v-else @submit.prevent="submitHandler">
-      <div class="input-field" >
-        <select ref="select" v-model="selectedCategory">
-          <option
-            v-for="c in categories"
-            :key="c.id"
-            :value="c.id"
-          >{{c.title}}</option>
-        </select>
-        <label>Выберите категорию</label>
-      </div>
-
       <p>
         <label>
           <input
@@ -48,6 +37,28 @@
           <span>Доход</span>
         </label>
       </p>
+
+      <div class="input-field select-field" v-show="this.type === 'outcome'">
+        <select ref="selectOutcome" v-model="selectedCategoryOutcome">
+          <option
+            v-for="c in categoriesOutcome"
+            :key="c.id"
+            :value="c.id"
+          >{{c.title}}</option>
+        </select>
+        <label>Выберите категорию</label>
+      </div>
+
+      <div class="input-field select-field" v-show="this.type === 'income'">
+        <select ref="selectIncome" v-model="selectedCategoryIncome">
+          <option
+            v-for="c in categoriesIncome"
+            :key="c.id"
+            :value="c.id"
+          >{{c.title}}</option>
+        </select>
+        <label>Выберите категорию</label>
+      </div>
 
       <div class="input-field">
         <input
@@ -100,8 +111,12 @@ export default {
   data: () => ({
     loading: true,
     categories: [],
-    select: null,
-    selectedCategory: null,
+    categoriesOutcome: [],
+    categoriesIncome: [],
+    selectOutcome: null,
+    selectIncome: null,
+    selectedCategoryOutcome: null,
+    selectedCategoryIncome: null,
     type: 'outcome',
     amount: null,
     description: ''
@@ -130,7 +145,7 @@ export default {
       if (this.canCreateRecord) {
         try {
           await this.$store.dispatch('createRecord', {
-            categoryId: this.selectedCategory,
+            categoryId: this.type === 'outcome' ? this.selectedCategoryOutcome : this.selectedCategoryIncome,
             amount: this.amount,
             description: this.description,
             type: this.type,
@@ -151,26 +166,38 @@ export default {
       } else {
         this.$message(`Недостаточно средств (сейчас на счете: ${this.info.bill} рублей)`)
       }
-
-
     }
   },
   async mounted() {
     this.categories = await this.$store.dispatch('fetchCategories')
     this.loading = false
 
+    this.categoriesOutcome = this.categories.filter(c => c.type === 'outcome')
+    this.categoriesIncome = this.categories.filter(c => c.type === 'income')
+
     if (this.categories.length) {
-      this.selectedCategory = this.categories[0].id
+      this.selectedCategoryOutcome = this.categoriesOutcome[0].id
+      this.selectedCategoryIncome = this.categoriesIncome[0].id
     }
 
     setTimeout(() => {
-      this.select = M.FormSelect.init(this.$refs.select)
+      this.selectOutcome = M.FormSelect.init(this.$refs.selectOutcome)
+      this.selectIncome = M.FormSelect.init(this.$refs.selectIncome)
     }, 0)
   },
   destroyed() {
-    if (this.select && this.select.destroy) {
-      this.select.destroy()
+    if (this.selectOutcome && this.selectOutcome.destroy) {
+      this.selectOutcome.destroy()
+    }
+    if (this.selectIncome && this.selectIncome.destroy) {
+      this.selectIncome.destroy()
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.select-field {
+  margin-top: 2.3rem;
+}
+</style>
