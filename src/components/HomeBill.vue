@@ -20,18 +20,21 @@
 
 <script>
 export default {
-  props: ['rates'],
+  props: ['valute'],
   data: () => ({
+    rates: {},
     currencies: ['RUB', 'USD', 'EUR']
   }),
-  computed: {
-    base() {
-      return this.$store.getters.info.bill / (this.rates['RUB'] / this.rates['EUR'])
+  mounted() {
+    this.rates = {
+      RUB: 1,
+      USD: this.valute['USD'].Value,
+      EUR: this.valute['EUR'].Value
     }
   },
   methods: {
     getCurrency(currency) {
-      return this.base * this.rates[currency] || '0'
+      return this.$store.getters.info.bill / this.rates[currency]
     }
   }
 }

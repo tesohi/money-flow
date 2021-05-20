@@ -15,11 +15,11 @@
           </thead>
 
           <tbody>
-          <tr v-for="cur in currencies" :key="cur">
-            <td>{{ cur }}</td>
-            <td>{{ rates[cur].toFixed(3) }}</td>
-            <td>{{ date | date('date') }}</td>
-          </tr>
+            <tr v-for="cur in currencies" :key="cur">
+              <td>{{ cur }}</td>
+              <td>{{ rates[cur] }}</td>
+              <td>{{ date | date('date') }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -29,18 +29,22 @@
 
 <script>
 export default {
-  props: ['rates', 'date'],
-  data: () => ({
-    currencies: ['RUB', 'USD', 'EUR']
+  props: ['valute', 'date'],
+  Data: () => ({
+    rates: {},
+    currencies: ['USD', 'EUR']
   }),
-  computed: {
-    base() {
-      return this.$store.getters.info.bill / (this.rates['RUB'] / this.rates['EUR'])
+  created() {
+    this.rates = {
+      RUB: 1,
+      USD: this.valute['USD'].Value,
+      EUR: this.valute['EUR'].Value
     }
+    this.currencies = ['USD', 'EUR']
   },
   methods: {
     getCurrency(currency) {
-      return this.base * this.rates[currency]
+      return this.rates[currency]
     }
   }
 }
