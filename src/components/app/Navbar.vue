@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar green lighten-1">
+  <nav class="navbar vue-color">
       <div class="nav-wrapper">
         <div class="navbar-left">
           <a href="#" @click.prevent="$emit('burger-click')">

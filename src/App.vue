@@ -27,6 +27,10 @@ export default {
 @import '~materialize-css/dist/css/materialize.min.css';
 @import 'assets/index.css';
 
+.vue-color{
+  background-color: rgb(65, 184, 131);
+}
+
 .dropdown-content {
   top: -66px;
 }
