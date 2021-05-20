@@ -6,6 +6,32 @@
       </div>
 
       <form @submit.prevent="submitHandler">
+        <p>
+          <label>
+            <input
+              class="with-gap"
+              name="type"
+              type="radio"
+              value="outcome"
+              v-model="type"
+            />
+            <span>Расход</span>
+          </label>
+        </p>
+
+        <p>
+          <label>
+            <input
+              class="with-gap"
+              name="type"
+              type="radio"
+              value="income"
+              v-model="type"
+            />
+            <span>Доход</span>
+          </label>
+        </p>
+
         <div class="input-field">
           <input
               id="name"
@@ -22,12 +48,12 @@
           </span>
         </div>
 
-        <div class="input-field">
+        <div class="input-field" v-if="type === 'outcome'">
           <input
-              id="limit"
-              type="number"
-              v-model.number="limit"
-              :class="{invalid: $v.limit.$dirty && !$v.limit.required || $v.limit.$dirty && !$v.limit.minValue}"
+            id="limit"
+            type="number"
+            v-model.number="limit"
+            :class="{invalid: $v.limit.$dirty && !$v.limit.required || $v.limit.$dirty && !$v.limit.minValue}"
           >
           <label for="limit">Лимит</label>
           <span 
@@ -60,7 +86,8 @@ export default {
   name: 'CategoryCreate',
   data: () => ({
     title: '',
-    limit: null
+    limit: null,
+    type: 'outcome'
   }),
   validations: {
     title: {required},
@@ -71,15 +98,23 @@ export default {
   },
   methods: {
     async submitHandler() {
-      if (this.$v.$invalid) {
-        this.$v.$touch()
-        return
+      if (this.type === 'income') {
+        if (this.$v.title.$invalid) {
+          this.$v.$touch()
+          return
+        }
+      } else {
+        if (this.$v.$invalid) {
+          this.$v.$touch()
+          return
+        }
       }
 
       try {
         const category = await this.$store.dispatch('createCategory', {
           title: this.title,
-          limit: this.limit
+          limit: this.limit,
+          type: this.type
         })
         this.title = ''
         this.limit = null

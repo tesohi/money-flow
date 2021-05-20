@@ -6,7 +6,7 @@
       </div>
 
       <form @submit.prevent="submitHandler">
-        <div class="input-field" >
+       <div class="input-field" >
           <select v-model="current" ref="select">
             <option
               v-for="c in categories"
@@ -33,7 +33,7 @@
           </span>
         </div>
 
-        <div class="input-field">
+        <div class="input-field" v-if="type === 'outcome'">
           <input
               id="limit"
               type="number"
@@ -79,24 +79,33 @@ export default {
     select: null,
     current: null,
     title: '',
-    limit: null
+    limit: null,
+    type: 'outcome'
   }),
   validations: {
     title: {required},
-    limit: {required, minValue: minValue(1)}
+    limit: {required, minValue: minValue(1)} 
   },
   methods: {
     async submitHandler() {
-      if (this.$v.$invalid) {
-        this.$v.$touch()
-        return
+      if (this.type === 'income') {
+        if (this.$v.title.$invalid) {
+          this.$v.$touch()
+          return
+        }
+      } else {
+        if (this.$v.$invalid) {
+          this.$v.$touch()
+          return
+        }
       }
 
       try {
         const categoryData = {
           id: this.current,
           title: this.title,
-          limit: this.limit
+          limit: this.limit,
+          type: this.type,
         }
         await this.$store.dispatch('updateCategory', categoryData)
         this.$message('Категория обновлена')
@@ -106,16 +115,21 @@ export default {
   },
   watch: {
     current(categoryId) {
-      const {id, title, limit} = this.categories.find(c => c.id === categoryId)
+      const {id, title, limit, type} = this.categories.find(c => c.id === categoryId)
       this.title = title
       this.limit = limit
+      this.type = type
+      setTimeout(() => {
+        M.updateTextFields()
+      }, 0)
     }
   },
   created() {
-    const {id, title, limit} = this.categories[0]
+    const {id, title, limit, type} = this.categories[0]
     this.current = id,
     this.title = title,
-    this.limit = limit
+    this.limit = limit,
+    this.type = type
   },
   mounted() {
     this.select = M.FormSelect.init(this.$refs.select)
