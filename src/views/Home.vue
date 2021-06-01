@@ -18,7 +18,7 @@
 
       <HomeCurrency 
         :valute="currency.Valute"
-        :date="currency.Date"
+        :date="currency.PreviousDate"
       />  
 
     </div>
