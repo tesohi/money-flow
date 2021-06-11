@@ -142,6 +142,20 @@ export default {
         return
       }
 
+      if (this.type === 'income') {
+        if (this.selectedCategoryIncome === null) {
+          this.$message('Выберите категорию (если категорий нет в списке, то создайте их)')
+          return
+        }
+      }
+
+      if (this.type === 'outcome') {
+        if (this.selectedCategoryOutcome === null) {
+          this.$message('Выберите категорию (если категорий нет в списке, то создайте их)')
+          return
+        }
+      }
+
       if (this.canCreateRecord) {
         try {
           await this.$store.dispatch('createRecord', {
@@ -175,13 +189,17 @@ export default {
     this.categoriesOutcome = this.categories.filter(c => c.type === 'outcome')
     this.categoriesIncome = this.categories.filter(c => c.type === 'income')
 
-    if (this.categories.length) {
+    if (this.categoriesOutcome.length) {
       this.selectedCategoryOutcome = this.categoriesOutcome[0].id
+    }
+    if (this.categoriesIncome.length) {
       this.selectedCategoryIncome = this.categoriesIncome[0].id
     }
 
     setTimeout(() => {
       this.selectOutcome = M.FormSelect.init(this.$refs.selectOutcome)
+    }, 0)
+    setTimeout(() => {
       this.selectIncome = M.FormSelect.init(this.$refs.selectIncome)
     }, 0)
   },
