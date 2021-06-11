@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import App from './App.vue'
+import Chartkick from 'vue-chartkick'
+import Chart from 'chart.js'
 import router from './router'
 import store from './store'
 import dateFilter from '@/filters/date.filter'
@@ -17,9 +19,9 @@ import 'firebase/database'
 
 
 Vue.config.productionTip = false
-
 Vue.use(messagePlugin)
 Vue.use(Vuelidate)
+Vue.use(Chartkick.use(Chart))
 Vue.filter('date', dateFilter)
 Vue.filter('currency', currencyFilter)
 Vue.directive('tooltip', tooltipDirective)
